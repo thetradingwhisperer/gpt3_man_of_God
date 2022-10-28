@@ -1,20 +1,21 @@
-from flask import Flask, request, session
+from flask import Flask, request
 from twilio.twiml.messaging_response import MessagingResponse
-from chefbot import ask, append_interaction_to_chat_log
-
+from preacher_bot import ask
 app = Flask(__name__)
 # if for some reason your conversation with the chef gets weird, change the secret key 
-app.config['SECRET_KEY'] = 'top-secret!'
+app.config['SECRET_KEY'] = 'preah_man'
 
-@app.route('/chefbot', methods=['POST'])
-def chef():
+@app.route('/preacher_bot', methods=['POST'])
+def preach():
     incoming_msg = request.values['Body']
-    chat_log = session.get('chat_log')
-    answer = ask(incoming_msg, chat_log)
-    session['chat_log'] = append_interaction_to_chat_log(incoming_msg, answer,
-                                                         chat_log)
+    print(f'incoming_msg {incoming_msg}')
+
+    answer = ask(incoming_msg)
+    print(f'answer: {answer}')
+    
     msg = MessagingResponse()
-    msg.message(answer)
+    msg = msg.message(answer)
+
     return str(msg)
 
 if __name__ == '__main__':
